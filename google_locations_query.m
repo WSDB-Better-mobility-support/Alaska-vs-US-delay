@@ -58,8 +58,8 @@ type='"AVAIL_SPECTRUM_REQ"';
 height= 30.0; %In meters; Note: 'height' needs decimal value
 agl='"AGL"';
 num_of_steps = 50; % will be increased inside the for loop
-num_of_query_per_location = 1 ;
-key_counter = 20;
+num_of_query_per_location = 20 ;
+key_counter = 0;
 %%
 %The data stored in the file as Alaska long lat us long lat
 format long;
@@ -112,7 +112,7 @@ for i = 1:num_of_steps
         key_counter = key_counter + 1 ;
         cd(my_path);
         
-        [~l,delay_google_tmp,error1]=...
+        [~,delay_google_tmp,error1]=...
             locations_query(type,lat_alaska(i) ,long_alaska(i),height,agl,key_counter, my_path );
         if error1 ==0
             delay_temp_alaska = [delay_temp_alaska  delay_google_tmp];
@@ -157,6 +157,9 @@ plot(1:num_of_steps , delay_google_alaska ,'-*' ,...
 xlabel('Locations number');
 ylabel('Delay (sec)');
 legend('Alaska' , 'Rest or US', 'Server');
+
+boxplot(delay_google_alaska ,delay_google_us, delay_ser , ['Alaska' , 'US' , 'Server'] , 'notch' , 'on');
+set(findobj(gca,'type','line'),'linew',2);
 
 ave_delay_alaska = sum(delay_google_alaska)/length(delay_google_alaska);
 ave_delay_us = sum(delay_google_us)/length(delay_google_us);
