@@ -48,14 +48,14 @@ server_name='https://www.googleapis.com/rpc';
 text_coding='"Content-Type: application/json ; charset=utf-8; "';
 device_type='"MODE_1"'; %Types of TVWS device: http://en.wikipedia.org/wiki/TV-band_device
 if key_counter < 999
-    key='"AIzaSyD9kWXHHBL4zkXfEPUIzahPJUwXoqygzKU"';%API selection
+    key='"AIzaSyCzAkKfQl93D8xAv_4kyMJSnvX1xz7VT6Q"';%API selection
 elseif key_counter < 1999
-    key='"AIzaSyAl9rewC1BA-FQyu3iN5xb06_7d9eiiArU"';
+    key='"AIzaSyAB5Qtjau-4enAmiWL-a_wMTq5Nvb9QPY8"';
 else
-    key='"AIzaSyBE-GOIVm2-uhWKeB1oINpmoSeyl7dUi3A"';
+    key='"AIzaSyD9kWXHHBL4zkXfEPUIzahPJUwXoqygzKU"';
 end
 %
-query_generator(request_type,device_type,latitude ,longitude ,height,agl,key, my_path)
+query_generator(request_type,device_type,latitude ,longitude ,height,agl,key, my_path);
 cd(my_path);
 %my_path=regexprep(my_path,' ','\\ ');
 cmnd=['/usr/bin/curl -X POST   ',server_name,' -H ',text_coding,' --data-binary @',my_path,'/google.json -w %{time_total}'];
@@ -80,7 +80,7 @@ else
     
     pos_end_query_str=findstr(response,end_query_str);
     % This number needs to be change with number of locations
-    pos_end_query_str = pos_end_query_str(end);
+   % pos_end_query_str = pos_end_query_str(end); % needed only in proactive
     
     length_end_query_str=length(end_query_str)+14; %Note: constant 14 added due to padding of '}' in JSON response
     delay=  str2num(response(pos_end_query_str+length_end_query_str:end));

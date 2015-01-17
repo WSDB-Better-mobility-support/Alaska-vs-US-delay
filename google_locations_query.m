@@ -46,9 +46,20 @@
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 tic;
-clear all;
+clear;
 close all;
 clc;
+%%
+%Plot parameters
+fontSize=16;
+lineWidth=1.5;
+x_start =-0.03;
+x_end = 0.83;
+box_width = 0.2;
+box1_pos = 0.1;
+box2_pos = 0.4;
+box3_pos = 0.7;
+outlierSize = 3;
 %%
 %Path to save files (select your own)
 my_path='/home/amjed/Documents/Gproject/workspace/data/WSDB_DATA';
@@ -125,7 +136,7 @@ for i = 1:num_of_steps
             delay_temp_us = [delay_temp_us  delay_google_tmp];
         end
         ser_del =connect_webserver
-        ser_temp_delay = [ser_temp_delay ser_del]
+        ser_temp_delay = [ser_temp_delay ser_del];
         
     end
     if error1 == 0 && error2 == 0
@@ -150,17 +161,32 @@ for i = 1:num_of_steps
 end
 
 %%
-plot(1:num_of_steps , delay_google_alaska ,'-*' ,...
-    1:num_of_steps , delay_google_us,'-^',...
-    1:num_of_steps , delay_ser,...
-    '-o' ,'LineWidth' , 1 );
-xlabel('Locations number');
+%Boxplot
+%  figure('Position',[440 378 560 420/3]);
+%  plot(1:num_of_steps , delay_google_alaska ,'-*' ,...
+%      1:num_of_steps , delay_google_us,'-^',...
+%      1:num_of_steps , delay_ser,...
+%      '-o' ,'LineWidth' , 1 );
+%  xlabel('Locations number');
+%  ylabel('Delay (sec)');
+%  legend('Tuvak to Dillingham (Alaska)' , 'Fertile to Crockett (US)', 'Server');
+
+figure('Position',[440 378 560 420/3]);  
+d = [delay_google_alaska' ,delay_google_us', delay_ser']; 
+boxplot( d, 'notch' , 'on', 'widths',[box_width box_width box_width ],...
+    'outliersize' ,outlierSize ,'positions' , [box1_pos box2_pos box3_pos]  );
+
 ylabel('Delay (sec)');
-legend('Alaska' , 'Rest or US', 'Server');
-
-boxplot(delay_google_alaska ,delay_google_us, delay_ser , ['Alaska' , 'US' , 'Server'] , 'notch' , 'on');
-set(findobj(gca,'type','line'),'linew',2);
-
+set(gca , 'XTickLabel' , {'Tuvak-Bethel(AK)' , 'Fertile-Hobbs(US)', 'Server'});
+set(findobj(gca,'type','line'),'linew',lineWidth);
+set(findobj('type' , 'axes') , 'FontSize' , fontSize);
+set(findobj('type' , 'text'),'FontSize' , fontSize);
+xlim([x_start x_end])
+%%
+%save
+save('Alaska-US-delay-comparison')
+%%
+%Statistics
 ave_delay_alaska = sum(delay_google_alaska)/length(delay_google_alaska);
 ave_delay_us = sum(delay_google_us)/length(delay_google_us);
 ave_delay_ser = sum(delay_ser)/length(delay_ser);

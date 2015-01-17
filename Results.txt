@@ -1,0 +1,6 @@
+Average delay in Alaska : 0.517
+Average delay in rest of US : 0.632
+Average delay of server : 0.309
+standard deviation of delay in Alaska : 0.200
+standard deviation of delay in rest of US : 0.186
+standard deviation of delay of server : 0.145
