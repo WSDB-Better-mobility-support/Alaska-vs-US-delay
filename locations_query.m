@@ -48,11 +48,20 @@ server_name='https://www.googleapis.com/rpc';
 text_coding='"Content-Type: application/json ; charset=utf-8; "';
 device_type='"MODE_1"'; %Types of TVWS device: http://en.wikipedia.org/wiki/TV-band_device
 if key_counter < 999
-    key='"AIzaSyCzAkKfQl93D8xAv_4kyMJSnvX1xz7VT6Q"';%API selection
+    disp(['key no. 1 , counter = ' , num2str(key_counter)])
+    key='"AIzaSyBGXMtOR8Ft4KKFqjyc6GRO7m2R8OfJdpA"';%API selection
 elseif key_counter < 1999
-    key='"AIzaSyAB5Qtjau-4enAmiWL-a_wMTq5Nvb9QPY8"';
+    disp(['key no. 2 , counter = ' , num2str(key_counter)])
+    key='"AIzaSyDl6Oef9zk_nrGLAxEfBawVCt1y9NryXd0"';
+elseif key_counter < 2999
+    disp(['key no. 3 , counter = ' , num2str(key_counter)])
+    key='"AIzaSyCg11sdt6F_twljdEn26zwGKazvvhNkL2c"';
+elseif key_counter < 3999
+    disp(['key no. 4 , counter = ' , num2str(key_counter)])
+    key='"AIzaSyDeCuuOoRfDrXO5W5Fd-Js_IUNS4-PFFNo"';
 else
-    key='"AIzaSyD9kWXHHBL4zkXfEPUIzahPJUwXoqygzKU"';
+    disp(['key no. 5 , counter = ' , num2str(key_counter)])
+    key='"AIzaSyDrvbHX9qtoBE27a3gGEdwa2UzYfzDgyX8"';
 end
 %
 query_generator(request_type,device_type,latitude ,longitude ,height,agl,key, my_path);
@@ -74,10 +83,7 @@ if ~isempty(findstr(response,warning_google));
     fprintf('API limit exceeded - quitting.\n');
     return;
 else
-    end_query_str='"FccTvBandWhiteSpace-2010"';
-    begining = findstr('{' ,response);
-    response = response(begining(1):end);
-    
+    end_query_str='"FccTvBandWhiteSpace-2010"';    
     pos_end_query_str=findstr(response,end_query_str);
     % This number needs to be change with number of locations
    % pos_end_query_str = pos_end_query_str(end); % needed only in proactive

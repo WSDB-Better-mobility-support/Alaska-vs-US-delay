@@ -1,3 +1,4 @@
+
 % google_location_query compare the response time of querying google WSDB
 % in Alaska and the rest of the US
 % add longitude and latitude to long_lat.txt file.
@@ -51,7 +52,7 @@ close all;
 clc;
 %%
 %Plot parameters
-fontSize=16;
+fontSize=14;
 lineWidth=1.5;
 x_start =-0.03;
 x_end = 0.83;
@@ -68,7 +69,7 @@ my_path='/home/amjed/Documents/Gproject/workspace/data/WSDB_DATA';
 type='"AVAIL_SPECTRUM_REQ"';
 height= 30.0; %In meters; Note: 'height' needs decimal value
 agl='"AGL"';
-num_of_steps = 50; % will be increased inside the for loop
+num_of_steps = 49; % will be increased inside the for loop
 num_of_query_per_location = 20 ;
 key_counter = 0;
 %%
@@ -135,7 +136,7 @@ for i = 1:num_of_steps
         if error2 ==0
             delay_temp_us = [delay_temp_us  delay_google_tmp];
         end
-        ser_del =connect_webserver
+        ser_del =connect_webserver;
         ser_temp_delay = [ser_temp_delay ser_del];
         
     end
@@ -161,27 +162,37 @@ for i = 1:num_of_steps
 end
 
 %%
-%Boxplot
-%  figure('Position',[440 378 560 420/3]);
-%  plot(1:num_of_steps , delay_google_alaska ,'-*' ,...
-%      1:num_of_steps , delay_google_us,'-^',...
-%      1:num_of_steps , delay_ser,...
-%      '-o' ,'LineWidth' , 1 );
-%  xlabel('Locations number');
-%  ylabel('Delay (sec)');
-%  legend('Tuvak to Dillingham (Alaska)' , 'Fertile to Crockett (US)', 'Server');
-
-figure('Position',[440 378 560 420/3]);  
-d = [delay_google_alaska' ,delay_google_us', delay_ser']; 
-boxplot( d, 'notch' , 'on', 'widths',[box_width box_width box_width ],...
-    'outliersize' ,outlierSize ,'positions' , [box1_pos box2_pos box3_pos]  );
+% plot and Boxplot
+figure('Position',[440 378 700 620/3]);
+d = [delay_google_alaska' ,delay_google_us', delay_ser'];
+boxplot( d, 'notch','on','widths',[box_width box_width box_width ],...
+    'outliersize',outlierSize,'positions', [box1_pos box2_pos box3_pos],'factorseparator',1);
 
 ylabel('Delay (sec)');
-set(gca , 'XTickLabel' , {'Tuvak-Bethel(AK)' , 'Fertile-Hobbs(US)', 'Server'});
+set(gca , 'XTickLabel',{'Tuvak-Bethel (AK)' , 'Fertile-Hobbs (US)', 'Googleapis (rpc)'});
 set(findobj(gca,'type','line'),'linew',lineWidth);
-set(findobj('type' , 'axes') , 'FontSize' , fontSize);
-set(findobj('type' , 'text'),'FontSize' , fontSize);
+ax = gca;
+ax.YTick = [0:0.5:2];
 xlim([x_start x_end])
+ylim([0 2]);
+
+figure('Position',[440 378 700 620/3]);
+plot(1:num_of_steps , delay_google_alaska ,'-*' ,...
+    1:num_of_steps , delay_google_us,'-^',...
+    1:num_of_steps , delay_ser,...
+    '-o' ,'LineWidth' , 1 );
+xlabel('Locations number');
+ylabel('Delay (sec)');
+legend({'AK' , 'US', 'rpc'});
+%legend({'Tuvak-Bethel (AK)' , 'Fertile-Hobbs (US)', 'Googleapis (rpc)'});
+set(findobj('type','axes') , 'FontSize',fontSize);
+set(findobj('type','text'),'FontSize',fontSize);
+set(findobj(gca,'type','line'),'linew',lineWidth);
+xlim([1 num_of_steps])
+yMax = max([max(delay_google_alaska),max(delay_google_us), max(delay_ser)]);
+ylim([0 yMax]);
+ax = gca;
+ax.YTick = [0:1:yMax];
 %%
 %save
 save('Alaska-US-delay-comparison')
