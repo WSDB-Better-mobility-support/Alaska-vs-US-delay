@@ -52,7 +52,7 @@ close all;
 clc;
 %%
 %Plot parameters
-fontSize=14;
+fontSize=16;
 lineWidth=1.5;
 x_start =-0.03;
 x_end = 0.83;
@@ -163,7 +163,7 @@ end
 
 %%
 % plot and Boxplot
-figure('Position',[440 378 700 620/3]);
+figure('Position',[440 378 560 620/3]);
 d = [delay_google_alaska' ,delay_google_us', delay_ser'];
 boxplot( d, 'notch','on','widths',[box_width box_width box_width ],...
     'outliersize',outlierSize,'positions', [box1_pos box2_pos box3_pos],'factorseparator',1);
@@ -175,8 +175,9 @@ ax = gca;
 ax.YTick = [0:0.5:2];
 xlim([x_start x_end])
 ylim([0 2]);
+set(gca, 'fontsize', fontSize)
 
-figure('Position',[440 378 700 620/3]);
+figure('Position',[440 378 560 620/3]);
 plot(1:num_of_steps , delay_google_alaska ,'-*' ,...
     1:num_of_steps , delay_google_us,'-^',...
     1:num_of_steps , delay_ser,...
